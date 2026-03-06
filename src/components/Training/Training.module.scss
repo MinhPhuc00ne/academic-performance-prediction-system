@@ -1,0 +1,169 @@
+.container{
+  padding:40px;
+  color:#f1f5f9;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.title{
+  font-size:28px;
+  font-weight:600;
+}
+
+.subtitle{
+  color:#94a3b8;
+}
+
+.banner{
+  padding:14px;
+  border-radius:8px;
+  margin-bottom:20px;
+}
+
+.success{
+  background:#052e16;
+  color:#4ade80;
+}
+
+.warning{
+  background:#422006;
+  color:#facc15;
+}
+
+.modeSwitch{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.modeSwitch button{
+  background:#1e293b;
+  border:none;
+  color:white;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.active{
+  background:#3b82f6 !important;
+}
+
+.uploadBox{
+  border:2px dashed #334155;
+  padding:60px;
+  text-align:center;
+  border-radius:12px;
+  cursor:pointer;
+  margin-bottom:30px;
+}
+
+.uploadBox:hover{
+  border-color:#3b82f6;
+}
+
+.uploadIcon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.selectBtn{
+  margin-top:15px;
+  background:#3b82f6;
+  border:none;
+  padding:10px 20px;
+  border-radius:8px;
+  color:white;
+}
+
+.form{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.form input{
+  background:#020617;
+  border:1px solid #1e293b;
+  padding:10px;
+  border-radius:6px;
+  color:white;
+}
+
+.form button{
+  background:#3b82f6;
+  border:none;
+  color:white;
+  padding:10px 20px;
+  border-radius:6px;
+}
+
+.datasetCard{
+  background:#0f172a;
+  padding:24px;
+  border-radius:10px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  text-align:left;
+  padding:12px;
+  color:#94a3b8;
+}
+
+td{
+  padding:14px;
+  border-top:1px solid #1e293b;
+}
+
+tr:hover{
+  background:#1e293b;
+}
+
+.deleteCell{
+  width:60px;
+  text-align:center;
+}
+
+.deleteBtn{
+  background:transparent;
+  border:none;
+  color:white;
+  cursor:pointer;
+  padding:6px;
+  border-radius:6px;
+  transition:0.2s;
+}
+
+.deleteBtn:hover{
+  background:#7f1d1d;
+  color:#ef4444;
+  transform:scale(1.15);
+}
+
+.trainWrapper{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+}
+
+.trainBtn{
+  background:#3b82f6;
+  border:none;
+  color:white;
+  padding:12px 26px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:16px;
+}
