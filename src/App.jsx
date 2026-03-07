@@ -31,7 +31,7 @@ function App() {
     <div className="app-container">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="main-content">
+      <main className="main-content page-enter">
         {activeTab === "training" && (
           <Training data={data} setData={setData} setModel={setModel} />
         )}
