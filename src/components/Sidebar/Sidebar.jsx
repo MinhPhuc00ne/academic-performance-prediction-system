@@ -1,77 +1,79 @@
 function Sidebar({ activeTab, setActiveTab }) {
 
   const styles = {
-    sidebar: {
-      width: "250px",
-      height: "100vh",
-      background: "#020617",
-      borderRight: "1px solid #1e293b",
-      padding: "20px",
-      color: "#f1f5f9"
+
+    sidebar:{
+      width:"220px",
+      background:"#020617",
+      borderRight:"1px solid #1e293b",
+      padding:"20px",
+      display:"flex",
+      flexDirection:"column",
+      gap:"12px"
     },
 
-    logo: {
-      fontSize: "18px",
-      fontWeight: "600",
-      marginBottom: "30px"
+    item:{
+      padding:"10px 14px",
+      borderRadius:"6px",
+      color:"#94a3b8",
+      cursor:"pointer"
     },
 
-    menu: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px"
-    },
-
-    menuItem: {
-      padding: "10px 14px",
-      borderRadius: "6px",
-      color: "#94a3b8",
-      cursor: "pointer",
-      transition: "0.2s"
-    },
-
-    active: {
-      background: "#2563eb",
-      color: "white"
+    active:{
+      background:"#2563eb",
+      color:"white"
     }
+
   };
 
-  const getItemStyle = (tab) => {
-    return activeTab === tab
-      ? { ...styles.menuItem, ...styles.active }
-      : styles.menuItem;
-  };
+  const getStyle = (tab) =>
+    activeTab === tab
+      ? { ...styles.item, ...styles.active }
+      : styles.item;
 
   return (
+
     <aside style={styles.sidebar}>
-      <div style={styles.logo}>
-        Academic Performance
+
+      <div
+        style={getStyle("dashboard")}
+        onClick={() => setActiveTab("dashboard")}
+      >
+        📊 Dashboard
       </div>
 
-      <div style={styles.menu}>
-        <div
-          style={getItemStyle("training")}
-          onClick={() => setActiveTab("training")}
-        >
-         📊  Training
-        </div>
-
-        <div
-          style={getItemStyle("predict")}
-          onClick={() => setActiveTab("predict")}
-        >
-         🧮 Predict
-        </div>
-
-        <div
-          style={getItemStyle("model")}
-          onClick={() => setActiveTab("model")}
-        >
-         📈 Model Result
-        </div>
+      <div
+        style={getStyle("training")}
+        onClick={() => setActiveTab("training")}
+      >
+       📈 Training
       </div>
+
+      <div
+        style={getStyle("predict")}
+        onClick={() => setActiveTab("predict")}
+      >
+       🧮 Prediction
+      </div>
+
+      <div
+        style={getStyle("model")}
+        onClick={() => setActiveTab("model")}
+      >
+       📈 Model Result
+      </div>
+
+      <div
+        style={getStyle("history")}
+        onClick={() => setActiveTab("history")}
+      >
+       🕘 History
+      </div>
+
     </aside>
+
   );
+
 }
 
 export default Sidebar;
