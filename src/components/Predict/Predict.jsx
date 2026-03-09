@@ -13,7 +13,7 @@ function Predict({ model }) {
     name: "",
     process: "",
     absence: "",
-    bonus: ""
+    final: ""
   });
 
   const [predictionResult, setPredictionResult] = useState(null);
@@ -443,7 +443,7 @@ const handleView = (row) => {
                 <td>{row.name}</td>
 
                 <td>
-                  P:{row.p} | A:{row.a} | B:{row.b}
+                  P:{row.p} | A:{row.a} | F:{row.b}
                 </td>
 
                 <td>{row.grade}</td>
