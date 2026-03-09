@@ -16,6 +16,8 @@ function Predict({ model }) {
     bonus: ""
   });
 
+  const [predictionResult, setPredictionResult] = useState(null);
+
   const [predictions, setPredictions] = useState(() => {
     const saved = localStorage.getItem("mas291_predictions");
     return saved ? JSON.parse(saved) : [];
@@ -101,7 +103,7 @@ function Predict({ model }) {
 
             const grade = predictGrade(p, a, b);
 
-            return {
+            const item = {
               id: row[0] || "-",
               name: row[1] || "-",
               p,
@@ -110,6 +112,10 @@ function Predict({ model }) {
               grade: grade.toFixed(2),
               conf: confidence()
             };
+
+            setPredictionResult(item);
+
+            return item;
 
           })
           .filter(Boolean);
@@ -168,6 +174,8 @@ function Predict({ model }) {
 
     };
 
+    setPredictionResult(item);
+
     setPredictions(prev => [...prev, item]);
 
     setInputs({
@@ -190,25 +198,17 @@ function Predict({ model }) {
   };
 
 
-  const handleView = (row) => {
+const handleView = (row) => {
 
-    alert(`
-Student: ${row.name}
+  setPredictionResult(row);
 
-Process: ${row.p}
-Absence: ${row.a}
-Bonus: ${row.b}
-
-Predicted Grade: ${row.grade}
-Confidence: ${row.conf}%
-`);
-
-  };
+};
 
 
   return (
 
     <div className={styles.container}>
+
 
       {/* HEADER */}
 
@@ -229,6 +229,52 @@ Confidence: ${row.conf}%
       </div>
 
 
+      {/* PREDICTION CARD */}
+
+      <div className={styles.resultWrapper}>
+
+        <div className={styles.resultCard}>
+
+          <p className={styles.resultLabel}>
+            PREDICTED FINAL GRADE
+          </p>
+
+          <div className={styles.resultValue}>
+            {predictionResult ? predictionResult.grade : "--"}
+            <span>/100</span>
+          </div>
+
+          <div className={styles.gradeBadge}>
+            {predictionResult ? `Confidence ${predictionResult.conf}%` : "No Prediction"}
+          </div>
+
+          <div className={styles.confidenceBox}>
+
+            <div className={styles.confHeader}>
+              <span>Confidence Score</span>
+              <span>
+                {predictionResult ? predictionResult.conf : "--"}%
+              </span>
+            </div>
+
+            <div className={styles.confBar}>
+              <div
+                className={styles.confFill}
+                style={{
+                  width: predictionResult
+                    ? predictionResult.conf + "%"
+                    : "0%"
+                }}
+              />
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
       {/* DATA SOURCE */}
 
       <div className={styles.sectionCard}>
@@ -237,8 +283,6 @@ Confidence: ${row.conf}%
           ☁ 1. Prediction Input
         </h2>
 
-
-        {/* MODE SWITCH */}
 
         <div className={styles.modeSwitch}>
 
@@ -258,8 +302,6 @@ Confidence: ${row.conf}%
 
         </div>
 
-
-        {/* UPLOAD MODE */}
 
         {mode === "upload" && (
 
@@ -294,8 +336,6 @@ Confidence: ${row.conf}%
 
         )}
 
-
-        {/* MANUAL MODE */}
 
         {mode === "manual" && (
 
@@ -431,8 +471,6 @@ Confidence: ${row.conf}%
 
       </div>
 
-
-      {/* FOOTER */}
 
       <div className={styles.footer}>
         MAS-SPRING 2026 – Academic Performance Prediction System (SAP)
