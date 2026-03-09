@@ -29,33 +29,29 @@ function App() {
   }, [model]);
 
   return (
-
     <div style={styles.app}>
 
       {/* TOPBAR */}
-
       <header style={styles.topbar}>
 
-        <div style={styles.left}>
-
+        <div style={styles.brand}>
           <img
             src="/images/logo.png"
             alt="logo"
             style={styles.logo}
           />
-
           <span style={styles.systemName}>
             Academic Performance Prediction System
           </span>
-
         </div>
 
         <input
+          type="text"
           placeholder="Search Student ID..."
           style={styles.search}
         />
 
-        <div style={styles.nav}>
+        <nav style={styles.nav}>
 
           <span
             style={activeTab === "dashboard" ? styles.activeNav : styles.navItem}
@@ -85,13 +81,11 @@ function App() {
             Model Result
           </span>
 
-        </div>
+        </nav>
 
       </header>
 
-
-      {/* MAIN AREA */}
-
+      {/* MAIN LAYOUT */}
       <div style={styles.main}>
 
         <Sidebar
@@ -126,78 +120,83 @@ function App() {
       </div>
 
     </div>
-
   );
-
 }
 
 const styles = {
 
-  app:{
-    height:"100vh",
-    display:"flex",
-    flexDirection:"column",
-    background:"#0f172a",
-    color:"white"
+  app: {
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    background: "#0f172a",
+    color: "white"
   },
 
-  topbar:{
-    height:"60px",
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"space-between",
-    padding:"0 30px",
-    background:"#020617",
-    borderBottom:"1px solid #1e293b"
+  topbar: {
+    height: "60px",
+    minHeight: "60px",
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 30px",
+    background: "#020617",
+    borderBottom: "1px solid #1e293b"
   },
 
-  left:{
-    display:"flex",
-    alignItems:"center",
-    gap:"10px"
+  brand: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px"
   },
 
-  logo:{
-    width:"28px"
+  logo: {
+    width: "30px",
+    height: "30px"
   },
 
-  systemName:{
-    fontWeight:"600"
+  systemName: {
+    fontWeight: "600",
+    fontSize: "15px"
   },
 
-  search:{
-    width:"260px",
-    padding:"8px 12px",
-    background:"#0f172a",
-    border:"1px solid #334155",
-    borderRadius:"6px",
-    color:"white"
+  search: {
+    width: "260px",
+    padding: "8px 12px",
+    background: "#0f172a",
+    border: "1px solid #334155",
+    borderRadius: "6px",
+    color: "white",
+    outline: "none"
   },
 
-  nav:{
-    display:"flex",
-    gap:"20px"
+  nav: {
+    display: "flex",
+    gap: "22px"
   },
 
-  navItem:{
-    cursor:"pointer",
-    color:"#94a3b8"
+  navItem: {
+    cursor: "pointer",
+    color: "#94a3b8"
   },
 
-  activeNav:{
-    cursor:"pointer",
-    color:"#3b82f6"
+  activeNav: {
+    cursor: "pointer",
+    color: "#3b82f6",
+    fontWeight: "500"
   },
 
-  main:{
-    flex:1,
-    display:"flex"
+  main: {
+    flex: 1,
+    display: "flex",
+    overflow: "hidden"
   },
 
-  content:{
-    flex:1,
-    padding:"30px",
-    overflow:"auto"
+  content: {
+    flex: 1,
+    padding: "30px",
+    overflowY: "auto"
   }
 
 };
