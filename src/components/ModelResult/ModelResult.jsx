@@ -25,15 +25,13 @@ function ModelResult({ model }) {
   }));
 
   if (!data.length || !model || model.beta0 === null) {
-    return <p>No prediction data available</p>;
+    return <p className="slide delay1">No prediction data available</p>;
   }
 
   /* ================= KPI ================= */
 
   const total = data.length;
-
   const avg = data.reduce((s, d) => s + d.f, 0) / total;
-
   const max = Math.max(...data.map(d => d.f));
   const min = Math.min(...data.map(d => d.f));
 
@@ -47,7 +45,7 @@ function ModelResult({ model }) {
   const avgP = data.reduce((s, d) => s + d.p, 0) / total;
   const avgA = data.reduce((s, d) => s + d.a, 0) / total;
 
-  /* ================= LINE MƯỢT ================= */
+  /* ================= LINE ================= */
 
   const minP = Math.min(...data.map(d => d.p));
   const maxP = Math.max(...data.map(d => d.p));
@@ -74,10 +72,13 @@ function ModelResult({ model }) {
   return (
     <div className={styles.container}>
 
-      <h1 className={styles.title}>📊 Model Result Dashboard</h1>
+      {/* TITLE */}
+      <h1 className={`${styles.title} slide delay1`}>
+        📊 Model Result Dashboard
+      </h1>
 
       {/* KPI */}
-      <div className={styles.kpiGrid}>
+      <div className={`${styles.kpiGrid} slide delay2`}>
 
         <div className={styles.kpiCard}>
           <p>Total Students</p>
@@ -102,7 +103,7 @@ function ModelResult({ model }) {
       </div>
 
       {/* CHART */}
-      <div className={styles.grid}>
+      <div className={`${styles.grid} slide delay3`}>
 
         {/* PROCESS */}
         <div className={styles.card}>
@@ -113,14 +114,8 @@ function ModelResult({ model }) {
 
               <CartesianGrid stroke="#1e293b" />
 
-              <XAxis
-                type="number"
-                dataKey="p"
-                domain={["dataMin", "dataMax"]}
-              />
-
+              <XAxis type="number" dataKey="p" domain={["dataMin", "dataMax"]} />
               <YAxis type="number" dataKey="f" />
-
               <Tooltip />
 
               <Scatter data={sortedP} fill="#3b82f6" />
@@ -146,14 +141,8 @@ function ModelResult({ model }) {
 
               <CartesianGrid stroke="#1e293b" />
 
-              <XAxis
-                type="number"
-                dataKey="a"
-                domain={["dataMin", "dataMax"]}
-              />
-
+              <XAxis type="number" dataKey="a" domain={["dataMin", "dataMax"]} />
               <YAxis type="number" dataKey="f" />
-
               <Tooltip />
 
               <Scatter data={sortedA} fill="#ef4444" />
@@ -173,7 +162,7 @@ function ModelResult({ model }) {
       </div>
 
       {/* TABLE */}
-      <div className={styles.tableCard}>
+      <div className={`${styles.tableCard} slide delay4`}>
 
         <h2>Prediction Dataset</h2>
 
@@ -204,7 +193,7 @@ function ModelResult({ model }) {
       </div>
 
       {/* MODEL */}
-      <div className={styles.modelBox}>
+      <div className={`${styles.modelBox} slide delay5`}>
 
         <h2>📌 Model Equation</h2>
 

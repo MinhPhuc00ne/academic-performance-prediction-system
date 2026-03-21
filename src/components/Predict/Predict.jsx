@@ -45,10 +45,7 @@ function Predict({ model }) {
     setHistory(prev => [newItem, ...prev]);
   };
 
-  /* ========================
-        PREDICT
-  ======================== */
-
+  /* ======================== */
   const predictGrade = (p, a, b) => {
 
     if (!model || model.beta0 === null) {
@@ -69,10 +66,6 @@ function Predict({ model }) {
     if (!model || !model.rSquared) return "-";
     return Math.round(model.rSquared * 100);
   };
-
-  /* ========================
-        ABSENCE STATUS
-  ======================== */
 
   const getAbsenceStatus = () => {
 
@@ -98,15 +91,12 @@ function Predict({ model }) {
 
     return {
       label: "FAILED (ABSENCE)",
-      message: "Absence exceeds 20%. Student fails regardless of grade.",
+      message: "Absence exceeds 20%. Student fails.",
       type: "danger"
     };
   };
 
-  /* ========================
-        CSV
-  ======================== */
-
+  /* ======================== */
   const handleFileUpload = (file) => {
 
     if (!file) return;
@@ -172,10 +162,6 @@ function Predict({ model }) {
     handleFileUpload(e.dataTransfer.files[0]);
   };
 
-  /* ========================
-        MANUAL
-  ======================== */
-
   const handlePredict = () => {
 
     if (!inputs.process || !inputs.absence) return;
@@ -214,13 +200,8 @@ function Predict({ model }) {
     });
   };
 
-  const handleDeleteAll = () => {
-    setPredictions([]);
-  };
-
-  const handleView = (row) => {
-    setPredictionResult(row);
-  };
+  const handleDeleteAll = () => setPredictions([]);
+  const handleView = (row) => setPredictionResult(row);
 
   const absenceStatus = getAbsenceStatus();
 
@@ -229,7 +210,7 @@ function Predict({ model }) {
     <div className={styles.container}>
 
       {/* HEADER */}
-      <div className={styles.header}>
+      <div className={`${styles.header} slide delay1`}>
         <div>
           <h1 className={styles.title}>Final Grade Prediction</h1>
           <p className={styles.subtitle}>
@@ -239,11 +220,9 @@ function Predict({ model }) {
       </div>
 
       {/* RESULT */}
-      <div className={styles.resultWrapper}>
+      <div className={`${styles.resultWrapper} slide delay2`}>
 
-        {/* GRADE */}
         <div className={styles.resultCard}>
-
           <p className={styles.resultLabel}>PREDICTED FINAL GRADE</p>
 
           <div className={styles.resultValue}>
@@ -256,32 +235,9 @@ function Predict({ model }) {
               ? `Confidence ${predictionResult.conf}%`
               : "No Prediction"}
           </div>
-
-          <div className={styles.confidenceBox}>
-            <div className={styles.confHeader}>
-              <span>Confidence Score</span>
-              <span>
-                {predictionResult ? predictionResult.conf : "--"}%
-              </span>
-            </div>
-
-            <div className={styles.confBar}>
-              <div
-                className={styles.confFill}
-                style={{
-                  width: predictionResult
-                    ? predictionResult.conf + "%"
-                    : "0%"
-                }}
-              />
-            </div>
-          </div>
-
         </div>
 
-        {/* ABSENCE */}
         <div className={styles.absenceCard}>
-
           <p className={styles.resultLabel}>ATTENDANCE STATUS</p>
 
           {predictionResult ? (
@@ -291,9 +247,7 @@ function Predict({ model }) {
                 <span>/4</span>
               </div>
 
-              <div
-                className={`${styles.absenceBadge} ${styles[absenceStatus.type]}`}
-              >
+              <div className={`${styles.absenceBadge} ${styles[absenceStatus.type]}`}>
                 {absenceStatus.label}
               </div>
 
@@ -304,13 +258,12 @@ function Predict({ model }) {
           ) : (
             <div className={styles.noData}>No Data</div>
           )}
-
         </div>
 
       </div>
 
       {/* INPUT */}
-      <div className={styles.sectionCard}>
+      <div className={`${styles.sectionCard} slide delay3`}>
 
         <h2 className={styles.sectionTitle}>
           ☁ 1. Prediction Input
@@ -410,7 +363,7 @@ function Predict({ model }) {
       </div>
 
       {/* TABLE */}
-      <div className={styles.datasetCard}>
+      <div className={`${styles.datasetCard} slide delay4`}>
 
         <div className={styles.datasetHeader}>
           <h2 className={styles.sectionTitle}>
@@ -428,17 +381,6 @@ function Predict({ model }) {
         <h3>Results ({predictions.length})</h3>
 
         <table>
-          <thead>
-            <tr>
-              <th>Student ID</th>
-              <th>Name</th>
-              <th>Input</th>
-              <th>Grade</th>
-              <th>Conf</th>
-              <th></th>
-            </tr>
-          </thead>
-
           <tbody>
             {predictions.map((row, i) => (
               <tr key={i}>
@@ -448,12 +390,7 @@ function Predict({ model }) {
                 <td>{row.grade}</td>
                 <td>{row.conf}%</td>
                 <td>
-                  <button
-                    className={styles.viewBtn}
-                    onClick={() => handleView(row)}
-                  >
-                    👁
-                  </button>
+                  <button onClick={() => handleView(row)}>👁</button>
                 </td>
               </tr>
             ))}
@@ -462,7 +399,7 @@ function Predict({ model }) {
 
       </div>
 
-      <div className={styles.footer}>
+      <div className={`${styles.footer} slide delay5`}>
         MAS-SPRING 2026 – SAP
       </div>
 
