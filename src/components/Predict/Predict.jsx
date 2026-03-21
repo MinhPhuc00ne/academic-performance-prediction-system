@@ -13,7 +13,7 @@ function Predict({ model }) {
     name: "",
     process: "",
     absence: "",
-    final: ""
+    bonus: ""
   });
 
   const [predictionResult, setPredictionResult] = useState(null);
@@ -23,39 +23,30 @@ function Predict({ model }) {
     return saved ? JSON.parse(saved) : [];
   });
 
-  useEffect(() => {
-    localStorage.setItem(
-      "mas291_predictions",
-      JSON.stringify(predictions)
-    );
-  }, [predictions]);
-
-  /* ========================
-        🔥 HISTORY (NEW)
-  ======================== */
   const [history, setHistory] = useState(() => {
     const saved = localStorage.getItem("mas291_history");
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      "mas291_history",
-      JSON.stringify(history)
-    );
+    localStorage.setItem("mas291_predictions", JSON.stringify(predictions));
+  }, [predictions]);
+
+  useEffect(() => {
+    localStorage.setItem("mas291_history", JSON.stringify(history));
   }, [history]);
 
   const addToHistory = (item, type) => {
     const newItem = {
       ...item,
-      type, // upload | manual
+      type,
       time: new Date().toLocaleString()
     };
     setHistory(prev => [newItem, ...prev]);
   };
 
   /* ========================
-        PREDICT FUNCTION
+        PREDICT
   ======================== */
 
   const predictGrade = (p, a, b) => {
@@ -74,18 +65,46 @@ function Predict({ model }) {
     return Math.max(0, Math.min(100, grade));
   };
 
-
   const confidence = () => {
-
     if (!model || !model.rSquared) return "-";
-
     return Math.round(model.rSquared * 100);
-
   };
 
+  /* ========================
+        ABSENCE STATUS
+  ======================== */
+
+  const getAbsenceStatus = () => {
+
+    if (!predictionResult) return null;
+
+    const a = parseFloat(predictionResult.a);
+
+    if (a === 0) {
+      return {
+        label: "Perfect Attendance",
+        message: "Excellent! Student has no absences.",
+        type: "success"
+      };
+    }
+
+    if (a > 0 && a <= 4) {
+      return {
+        label: "Warning",
+        message: "Absence is within limit (≤20%) but needs attention.",
+        type: "warning"
+      };
+    }
+
+    return {
+      label: "FAILED (ABSENCE)",
+      message: "Absence exceeds 20%. Student fails regardless of grade.",
+      type: "danger"
+    };
+  };
 
   /* ========================
-        CSV UPLOAD
+        CSV
   ======================== */
 
   const handleFileUpload = (file) => {
@@ -98,9 +117,7 @@ function Predict({ model }) {
     }
 
     Papa.parse(file, {
-
       skipEmptyLines: true,
-
       complete: (results) => {
 
         let rows = results.data;
@@ -137,8 +154,7 @@ function Predict({ model }) {
             };
 
             setPredictionResult(item);
-
-            addToHistory(item, "upload"); // 🔥 ADD HISTORY
+            addToHistory(item, "upload");
 
             return item;
 
@@ -148,25 +164,16 @@ function Predict({ model }) {
         setPredictions(prev => [...prev, ...formatted]);
 
       }
-
     });
-
   };
-
 
   const handleDrop = (e) => {
-
     e.preventDefault();
-
-    const file = e.dataTransfer.files[0];
-
-    handleFileUpload(file);
-
+    handleFileUpload(e.dataTransfer.files[0]);
   };
 
-
   /* ========================
-        MANUAL ENTRY
+        MANUAL
   ======================== */
 
   const handlePredict = () => {
@@ -185,25 +192,18 @@ function Predict({ model }) {
     const grade = predictGrade(p, a, b);
 
     const item = {
-
       id: inputs.id || "-",
       name: inputs.name || "-",
-
       p,
       a,
       b,
-
       grade: grade.toFixed(2),
-
       conf: confidence()
-
     };
 
     setPredictionResult(item);
-
     setPredictions(prev => [...prev, item]);
-
-    addToHistory(item, "manual"); // 🔥 ADD HISTORY
+    addToHistory(item, "manual");
 
     setInputs({
       id: "",
@@ -212,59 +212,39 @@ function Predict({ model }) {
       absence: "",
       bonus: ""
     });
-
   };
-
-
-  /* ========================
-        DELETE
-  ======================== */
 
   const handleDeleteAll = () => {
-    setPredictions([]); // ❗ KHÔNG XÓA HISTORY
+    setPredictions([]);
   };
-
 
   const handleView = (row) => {
-
     setPredictionResult(row);
-
   };
 
+  const absenceStatus = getAbsenceStatus();
 
   return (
 
     <div className={styles.container}>
 
-
       {/* HEADER */}
-
       <div className={styles.header}>
-
         <div>
-
-          <h1 className={styles.title}>
-            Final Grade Prediction
-          </h1>
-
+          <h1 className={styles.title}>Final Grade Prediction</h1>
           <p className={styles.subtitle}>
             Academic Performance Prediction System (SAP)
           </p>
-
         </div>
-
       </div>
 
-
-      {/* PREDICTION CARD */}
-
+      {/* RESULT */}
       <div className={styles.resultWrapper}>
 
+        {/* GRADE */}
         <div className={styles.resultCard}>
 
-          <p className={styles.resultLabel}>
-            PREDICTED FINAL GRADE
-          </p>
+          <p className={styles.resultLabel}>PREDICTED FINAL GRADE</p>
 
           <div className={styles.resultValue}>
             {predictionResult ? predictionResult.grade : "--"}
@@ -272,11 +252,12 @@ function Predict({ model }) {
           </div>
 
           <div className={styles.gradeBadge}>
-            {predictionResult ? `Confidence ${predictionResult.conf}%` : "No Prediction"}
+            {predictionResult
+              ? `Confidence ${predictionResult.conf}%`
+              : "No Prediction"}
           </div>
 
           <div className={styles.confidenceBox}>
-
             <div className={styles.confHeader}>
               <span>Confidence Score</span>
               <span>
@@ -294,25 +275,48 @@ function Predict({ model }) {
                 }}
               />
             </div>
-
           </div>
+
+        </div>
+
+        {/* ABSENCE */}
+        <div className={styles.absenceCard}>
+
+          <p className={styles.resultLabel}>ATTENDANCE STATUS</p>
+
+          {predictionResult ? (
+            <>
+              <div className={styles.absenceValue}>
+                {predictionResult.a}
+                <span>/4</span>
+              </div>
+
+              <div
+                className={`${styles.absenceBadge} ${styles[absenceStatus.type]}`}
+              >
+                {absenceStatus.label}
+              </div>
+
+              <p className={styles.absenceMessage}>
+                {absenceStatus.message}
+              </p>
+            </>
+          ) : (
+            <div className={styles.noData}>No Data</div>
+          )}
 
         </div>
 
       </div>
 
-
-      {/* DATA SOURCE */}
-
+      {/* INPUT */}
       <div className={styles.sectionCard}>
 
         <h2 className={styles.sectionTitle}>
           ☁ 1. Prediction Input
         </h2>
 
-
         <div className={styles.modeSwitch}>
-
           <button
             className={mode === "upload" ? styles.active : ""}
             onClick={() => setMode("upload")}
@@ -326,19 +330,15 @@ function Predict({ model }) {
           >
             Manual Entry
           </button>
-
         </div>
 
-
         {mode === "upload" && (
-
           <div
             className={styles.uploadBox}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current.click()}
           >
-
             <input
               ref={fileInputRef}
               type="file"
@@ -348,24 +348,16 @@ function Predict({ model }) {
             />
 
             <div className={styles.uploadIcon}>☁</div>
-
             <h3>Upload Student Data</h3>
-
-            <p>
-              Drag and drop CSV file containing student scores
-            </p>
+            <p>Drag and drop CSV file</p>
 
             <button className={styles.selectBtn}>
               Select Files
             </button>
-
           </div>
-
         )}
 
-
         {mode === "manual" && (
-
           <div className={styles.form}>
 
             <input
@@ -413,18 +405,14 @@ function Predict({ model }) {
             </button>
 
           </div>
-
         )}
 
       </div>
 
-
-      {/* RESULT TABLE */}
-
+      {/* TABLE */}
       <div className={styles.datasetCard}>
 
         <div className={styles.datasetHeader}>
-
           <h2 className={styles.sectionTitle}>
             2. Prediction Results
           </h2>
@@ -435,78 +423,51 @@ function Predict({ model }) {
           >
             Delete All
           </button>
-
         </div>
 
-        <h3>
-          Results ({predictions.length})
-        </h3>
+        <h3>Results ({predictions.length})</h3>
 
         <table>
-
           <thead>
-
             <tr>
-
               <th>Student ID</th>
               <th>Name</th>
-              <th>Input Metrics</th>
-              <th>Predicted Grade</th>
-              <th>Confidence</th>
+              <th>Input</th>
+              <th>Grade</th>
+              <th>Conf</th>
               <th></th>
-
             </tr>
-
           </thead>
 
           <tbody>
-
-            {predictions.map((row, index) => (
-
-              <tr key={index}>
-
+            {predictions.map((row, i) => (
+              <tr key={i}>
                 <td>{row.id}</td>
-
                 <td>{row.name}</td>
-
-                <td>
-                  P:{row.p} | A:{row.a} | F:{row.b}
-                </td>
-
+                <td>P:{row.p} | A:{row.a} | F:{row.b}</td>
                 <td>{row.grade}</td>
-
                 <td>{row.conf}%</td>
-
                 <td>
-
                   <button
                     className={styles.viewBtn}
                     onClick={() => handleView(row)}
                   >
                     👁
                   </button>
-
                 </td>
-
               </tr>
-
             ))}
-
           </tbody>
-
         </table>
 
       </div>
 
-
       <div className={styles.footer}>
-        MAS-SPRING 2026 – Academic Performance Prediction System (SAP)
+        MAS-SPRING 2026 – SAP
       </div>
 
     </div>
-
   );
-
 }
 
 export default Predict;
