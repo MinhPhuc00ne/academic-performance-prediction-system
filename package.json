@@ -13,6 +13,7 @@
     "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "recharts": "^3.8.0",
     "sass": "^1.97.3"
   },
   "devDependencies": {
