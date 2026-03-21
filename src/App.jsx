@@ -3,10 +3,14 @@ import Training from "./components/Training/Training";
 import ModelResult from "./components/ModelResult/ModelResult";
 import Predict from "./components/Predict/Predict";
 import Sidebar from "./components/Sidebar/Sidebar";
+import History from "./components/History/History"; // 🔥 THÊM
 
 function App() {
 
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  /* 🔥 SEARCH STATE */
+  const [searchId, setSearchId] = useState("");
 
   const [data, setData] = useState(() => {
     const savedData = localStorage.getItem("mas291_data");
@@ -45,10 +49,13 @@ function App() {
           </span>
         </div>
 
+        {/* 🔥 SEARCH CONNECT */}
         <input
           type="text"
           placeholder="Search Student ID..."
           style={styles.search}
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
         />
 
         <nav style={styles.nav}>
@@ -79,6 +86,14 @@ function App() {
             onClick={() => setActiveTab("model")}
           >
             Model Result
+          </span>
+
+          {/* 🔥 TAB HISTORY */}
+          <span
+            style={activeTab === "history" ? styles.activeNav : styles.navItem}
+            onClick={() => setActiveTab("history")}
+          >
+            History
           </span>
 
         </nav>
@@ -113,6 +128,11 @@ function App() {
 
           {activeTab === "model" && (
             <ModelResult model={model} />
+          )}
+
+          {/* 🔥 HISTORY PAGE */}
+          {activeTab === "history" && (
+            <History searchId={searchId} />
           )}
 
         </main>

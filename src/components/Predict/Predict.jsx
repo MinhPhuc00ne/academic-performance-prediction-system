@@ -30,6 +30,29 @@ function Predict({ model }) {
     );
   }, [predictions]);
 
+  /* ========================
+        🔥 HISTORY (NEW)
+  ======================== */
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem("mas291_history");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "mas291_history",
+      JSON.stringify(history)
+    );
+  }, [history]);
+
+  const addToHistory = (item, type) => {
+    const newItem = {
+      ...item,
+      type, // upload | manual
+      time: new Date().toLocaleString()
+    };
+    setHistory(prev => [newItem, ...prev]);
+  };
 
   /* ========================
         PREDICT FUNCTION
@@ -115,6 +138,8 @@ function Predict({ model }) {
 
             setPredictionResult(item);
 
+            addToHistory(item, "upload"); // 🔥 ADD HISTORY
+
             return item;
 
           })
@@ -178,6 +203,8 @@ function Predict({ model }) {
 
     setPredictions(prev => [...prev, item]);
 
+    addToHistory(item, "manual"); // 🔥 ADD HISTORY
+
     setInputs({
       id: "",
       name: "",
@@ -194,15 +221,15 @@ function Predict({ model }) {
   ======================== */
 
   const handleDeleteAll = () => {
-    setPredictions([]);
+    setPredictions([]); // ❗ KHÔNG XÓA HISTORY
   };
 
 
-const handleView = (row) => {
+  const handleView = (row) => {
 
-  setPredictionResult(row);
+    setPredictionResult(row);
 
-};
+  };
 
 
   return (
@@ -374,7 +401,7 @@ const handleView = (row) => {
             />
 
             <input
-              placeholder="Bonus"
+              placeholder="Final"
               value={inputs.bonus}
               onChange={(e) =>
                 setInputs({ ...inputs, bonus: e.target.value })

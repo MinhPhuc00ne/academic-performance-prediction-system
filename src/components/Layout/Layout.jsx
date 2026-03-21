@@ -1,6 +1,10 @@
+import { useState } from "react"; // 🔥 THÊM
 import styles from "./Layout.module.scss";
 
-function Layout({ children }) {
+function Layout({ children, setSearchId }) { // 🔥 THÊM PROP
+
+    const [value, setValue] = useState(""); // 🔥 STATE SEARCH
+
     return (
         <div className={styles.layout}>
 
@@ -44,9 +48,15 @@ function Layout({ children }) {
                         Academic Performance Prediction System
                     </div>
 
+                    {/* 🔥 SEARCH CONNECT */}
                     <input
                         className={styles.search}
                         placeholder="Search student ID..."
+                        value={value}
+                        onChange={(e) => {
+                            setValue(e.target.value);      // hiển thị input
+                            setSearchId(e.target.value);  // 🔥 truyền ra ngoài
+                        }}
                     />
 
                     <div className={styles.nav}>

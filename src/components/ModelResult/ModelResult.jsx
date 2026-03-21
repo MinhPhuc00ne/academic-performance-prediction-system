@@ -1,5 +1,5 @@
 import {
-  ScatterChart,
+  ComposedChart,
   Scatter,
   Line,
   XAxis,
@@ -13,81 +13,95 @@ import styles from "./ModelResult.module.scss";
 
 function ModelResult({ model }) {
 
-  const rawData = JSON.parse(localStorage.getItem("mas291_data")) || [];
+  const predictions =
+    JSON.parse(localStorage.getItem("mas291_predictions")) || [];
 
-  // ÉP KIỂU NUMBER (QUAN TRỌNG)
-  const data = rawData.map(d => ({
+  const data = predictions.map(d => ({
+    id: d.id,
+    name: d.name,
     p: Number(d.p),
     a: Number(d.a),
-    f: Number(d.f)
+    f: Number(d.grade)
   }));
 
   if (!data.length || !model || model.beta0 === null) {
-    return <p>No model or data available</p>;
+    return <p>No prediction data available</p>;
   }
 
-  /* ======================
-      SORT DATA
-  ====================== */
+  /* ================= KPI ================= */
+
+  const total = data.length;
+
+  const avg = data.reduce((s, d) => s + d.f, 0) / total;
+
+  const max = Math.max(...data.map(d => d.f));
+  const min = Math.min(...data.map(d => d.f));
+
+  /* ================= SORT ================= */
+
   const sortedP = [...data].sort((a, b) => a.p - b.p);
   const sortedA = [...data].sort((a, b) => a.a - b.a);
 
-  /* ======================
-      AVERAGE
-  ====================== */
-  const avgP = data.reduce((s, d) => s + d.p, 0) / data.length;
-  const avgA = data.reduce((s, d) => s + d.a, 0) / data.length;
+  /* ================= AVG ================= */
 
-  /* ======================
-      REGRESSION LINE (ĐÚNG)
-  ====================== */
+  const avgP = data.reduce((s, d) => s + d.p, 0) / total;
+  const avgA = data.reduce((s, d) => s + d.a, 0) / total;
+
+  /* ================= LINE MƯỢT ================= */
 
   const minP = Math.min(...data.map(d => d.p));
   const maxP = Math.max(...data.map(d => d.p));
 
-  const processLine = [
-    {
-      p: minP,
-      f: model.beta0 + model.beta1 * minP + model.beta2 * avgA
-    },
-    {
-      p: maxP,
-      f: model.beta0 + model.beta1 * maxP + model.beta2 * avgA
-    }
-  ];
+  const processLine = Array.from({ length: 50 }, (_, i) => {
+    const x = minP + (i / 49) * (maxP - minP);
+    return {
+      p: x,
+      f: model.beta0 + model.beta1 * x + model.beta2 * avgA
+    };
+  });
 
   const minA = Math.min(...data.map(d => d.a));
   const maxA = Math.max(...data.map(d => d.a));
 
-  const absenceLine = [
-    {
-      a: minA,
-      f: model.beta0 + model.beta1 * avgP + model.beta2 * minA
-    },
-    {
-      a: maxA,
-      f: model.beta0 + model.beta1 * avgP + model.beta2 * maxA
-    }
-  ];
-
-  /* ======================
-      IMPACT
-  ====================== */
-
-  const impactP = Math.abs(model.beta1);
-  const impactA = Math.abs(model.beta2);
-  const total = impactP + impactA;
-
-  const pPercent = total === 0 ? 0 : (impactP / total) * 100;
-  const aPercent = total === 0 ? 0 : (impactA / total) * 100;
+  const absenceLine = Array.from({ length: 50 }, (_, i) => {
+    const x = minA + (i / 49) * (maxA - minA);
+    return {
+      a: x,
+      f: model.beta0 + model.beta1 * avgP + model.beta2 * x
+    };
+  });
 
   return (
     <div className={styles.container}>
 
-      <h1 className={styles.title}>
-        📊 Model Analysis Dashboard
-      </h1>
+      <h1 className={styles.title}>📊 Model Result Dashboard</h1>
 
+      {/* KPI */}
+      <div className={styles.kpiGrid}>
+
+        <div className={styles.kpiCard}>
+          <p>Total Students</p>
+          <h2>{total}</h2>
+        </div>
+
+        <div className={styles.kpiCard}>
+          <p>Average Score</p>
+          <h2>{avg.toFixed(2)}</h2>
+        </div>
+
+        <div className={styles.kpiCard}>
+          <p>Highest Score</p>
+          <h2>{max.toFixed(2)}</h2>
+        </div>
+
+        <div className={styles.kpiCard}>
+          <p>Lowest Score</p>
+          <h2>{min.toFixed(2)}</h2>
+        </div>
+
+      </div>
+
+      {/* CHART */}
       <div className={styles.grid}>
 
         {/* PROCESS */}
@@ -95,7 +109,8 @@ function ModelResult({ model }) {
           <h2>📈 Process vs Final</h2>
 
           <ResponsiveContainer width="100%" height={320}>
-            <ScatterChart>
+            <ComposedChart>
+
               <CartesianGrid stroke="#1e293b" />
 
               <XAxis
@@ -104,10 +119,7 @@ function ModelResult({ model }) {
                 domain={["dataMin", "dataMax"]}
               />
 
-              <YAxis
-                type="number"
-                dataKey="f"
-              />
+              <YAxis type="number" dataKey="f" />
 
               <Tooltip />
 
@@ -121,7 +133,7 @@ function ModelResult({ model }) {
                 dot={false}
               />
 
-            </ScatterChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
 
@@ -130,7 +142,8 @@ function ModelResult({ model }) {
           <h2>📉 Absence vs Final</h2>
 
           <ResponsiveContainer width="100%" height={320}>
-            <ScatterChart>
+            <ComposedChart>
+
               <CartesianGrid stroke="#1e293b" />
 
               <XAxis
@@ -139,10 +152,7 @@ function ModelResult({ model }) {
                 domain={["dataMin", "dataMax"]}
               />
 
-              <YAxis
-                type="number"
-                dataKey="f"
-              />
+              <YAxis type="number" dataKey="f" />
 
               <Tooltip />
 
@@ -156,41 +166,45 @@ function ModelResult({ model }) {
                 dot={false}
               />
 
-            </ScatterChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
 
       </div>
 
-      {/* IMPACT */}
-      <div className={styles.impactBox}>
+      {/* TABLE */}
+      <div className={styles.tableCard}>
 
-        <h2>🔥 Feature Impact</h2>
+        <h2>Prediction Dataset</h2>
 
-        <div className={styles.impactItem}>
-          <span>Process ({pPercent.toFixed(1)}%)</span>
-          <div className={styles.bar}>
-            <div
-              className={styles.fillBlue}
-              style={{ width: `${pPercent}%` }}
-            />
-          </div>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Process</th>
+              <th>Absence</th>
+              <th>Predicted</th>
+            </tr>
+          </thead>
 
-        <div className={styles.impactItem}>
-          <span>Absence ({aPercent.toFixed(1)}%)</span>
-          <div className={styles.bar}>
-            <div
-              className={styles.fillRed}
-              style={{ width: `${aPercent}%` }}
-            />
-          </div>
-        </div>
+          <tbody>
+            {data.map((row, i) => (
+              <tr key={i}>
+                <td>{row.id}</td>
+                <td>{row.name}</td>
+                <td>{row.p}</td>
+                <td>{row.a}</td>
+                <td>{row.f.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
       </div>
 
       {/* MODEL */}
-      <div className={styles.modelInfo}>
+      <div className={styles.modelBox}>
 
         <h2>📌 Model Equation</h2>
 
