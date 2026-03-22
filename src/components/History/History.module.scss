@@ -12,10 +12,70 @@ table {
   border-collapse: collapse;
 }
 
+.tableWrap {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  border-bottom: 1px solid #1e293b;
+  background: #020617;
+}
+
+.deleteAllBtn {
+  border: 1px solid #7f1d1d;
+  background: #991b1b;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.deleteAllBtn:hover {
+  background: #b91c1c;
+}
+
+.tableWrap table {
+  min-width: 780px;
+}
+
+.tableWrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.tableWrap::-webkit-scrollbar-track {
+  background: #0b1220;
+}
+
+.tableWrap::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
 th, td {
   padding: 10px;
   border-bottom: 1px solid #1e293b;
   text-align: left;
+}
+
+.deleteBtn {
+  border: 1px solid #7f1d1d;
+  background: transparent;
+  color: #fca5a5;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: rgba(185, 28, 28, 0.2);
 }
 
 th {
@@ -29,6 +89,63 @@ tr:hover {
 .empty {
   color: #f87171;
   margin-bottom: 10px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirmBox {
+  width: min(460px, calc(100vw - 32px));
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.confirmBox h3 {
+  margin: 0 0 10px;
+}
+
+.confirmBox p {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.confirmActions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancelBtn,
+.confirmBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancelBtn {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.confirmBtn {
+  background: #dc2626;
+  color: #fff;
+}
+
+.confirmBtn:hover {
+  background: #ef4444;
 }
 .slide{
   opacity:0;

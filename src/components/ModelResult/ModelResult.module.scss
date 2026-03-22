@@ -54,6 +54,31 @@
   border-radius: 12px;
 }
 
+.historyTableWrap {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+}
+
+.historyTableWrap table {
+  min-width: 760px;
+}
+
+.historyTableWrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.historyTableWrap::-webkit-scrollbar-track {
+  background: #0b1220;
+}
+
+.historyTableWrap::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2563eb, #1d4ed8);
+  border-radius: 20px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -77,9 +102,42 @@ tr:hover {
 /* MODEL */
 .modelBox {
   margin-top: 30px;
-  background: #020617;
-  padding: 20px;
+  background: radial-gradient(circle at top right, #1d4ed8 0%, #0f172a 45%, #020617 100%);
+  border: 1px solid #334155;
+  padding: 22px;
+  border-radius: 14px;
+}
+
+.modelBox h2 {
+  margin: 0 0 14px;
+  font-size: 22px;
+  letter-spacing: 0.2px;
+}
+
+.equationPill {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid #475569;
   border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.modelMeta {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modelMeta span {
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: #cbd5e1;
+  font-size: 13px;
 }
 .slide{
   opacity:0;

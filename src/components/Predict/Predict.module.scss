@@ -121,6 +121,31 @@
   border-radius:12px;
 }
 
+.tableWrap{
+  max-height:360px;
+  overflow:auto;
+  border:1px solid #1e293b;
+  border-radius:10px;
+}
+
+.tableWrap table{
+  min-width:720px;
+}
+
+.tableWrap::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+}
+
+.tableWrap::-webkit-scrollbar-track{
+  background:#0b1220;
+}
+
+.tableWrap::-webkit-scrollbar-thumb{
+  background:#334155;
+  border-radius:10px;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
