@@ -12,7 +12,7 @@ function App() {
         return validTabs.includes(savedTab) ? savedTab : "training";
     });
 
-    /* 🔥 SEARCH STATE */
+    /* SEARCH */
     const [searchId, setSearchId] = useState("");
     const [predictSearchRequest, setPredictSearchRequest] = useState(null);
 
@@ -72,7 +72,7 @@ function App() {
                 </div>
 
                 <div style={styles.searchGroup}>
-                    {/* 🔥 SEARCH CONNECT */}
+                    {/* SEARCH CONNECT */}
                     <input
                         type="text"
                         placeholder="Search Student ID..."

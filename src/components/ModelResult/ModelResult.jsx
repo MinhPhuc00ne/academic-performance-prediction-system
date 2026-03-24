@@ -149,7 +149,7 @@ function ModelResult({ model, data = [] }) {
                 </div>
 
                 <div className={styles.modelMeta}>
-                    <span>R: {(model.rSquared * 100).toFixed(2)}%</span>
+                    <span>R²: {(model.rSquared * 100).toFixed(2)}%</span>
                     <span>Training Rows: {trainingData.length}</span>
                     <span>Prediction Rows: {predictionData.length}</span>
                 </div>
