@@ -32,7 +32,7 @@ function Layout({ children, setSearchId }) {
                 {/* TOPBAR */}
                 <div className={styles.topbar}>
                     <div className={styles.brand}>
-                        <img src="/images/favicon.png" alt="logo" />
+                      <img src="/images/logo.png" alt="logo" />
                         Academic Performance Prediction System
                     </div>
 
