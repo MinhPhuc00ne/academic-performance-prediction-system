@@ -4,7 +4,7 @@
 
 [![React](https://img.shields.io/badge/React-19.2-blue?logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 An intuitive, automated web-based analytical tool designed to forecast student final exam scores using Multiple Linear Regression (MLR). Built to help educators and students identify at-risk performance early and enable proactive academic intervention.
 
@@ -104,3 +104,15 @@ $$\hat{Y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$$
 - 🧮 **Automated Model Training:** Instantly fits Multiple Linear Regression parameters ($\beta_0, \beta_1, \beta_2$).
 - 🎯 **Individual & Batch Predictions:** Estimate final grades for single student entries or bulk dataset entries.
 - 📊 **Visual Analytics:** Interactive scatter plots, trendlines, and risk warning indicators.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, development setup, and process for submitting pull requests.
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
